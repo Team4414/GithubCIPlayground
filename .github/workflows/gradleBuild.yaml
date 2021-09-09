@@ -1,0 +1,32 @@
+#Just an attempt to build the robot project using gradle. This should fail if there are any obvious syntax errors pushed to master.
+
+name: Gradle Build Test
+
+#This will trigger when someone pushes to master
+on:
+  push:
+    branches: [master]
+
+
+jobs:
+  #Make a new job called "build" that will do the build test
+  build:
+
+    #Make it run on linux (because it uses the least cloud minutes and is simplest)
+    runs-on: ubuntu-latest
+
+    steps:
+    #Checkout the current code using a prebuilt official action
+    -uses: actions/checkout@v2
+
+    #Use JDK 11
+    -name: Setup JDK 11
+     with:
+      java-version: '11'
+      distribution: 'adopt'
+      cache: gradle
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+
